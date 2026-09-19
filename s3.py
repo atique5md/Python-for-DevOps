@@ -32,7 +32,6 @@ def show_bucket(s3):
     for bucket in s3.buckets.all():
         print(bucket.name)
 
-show_bucket(s3)
 
 def uplode_backup(s3, file_name, bucket_name, key_name):
     data = open(file_name, 'rb')
