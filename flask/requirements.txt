@@ -1,0 +1,7 @@
+Flask
+MarkupSafe
+Werkzeug
+itsdangerous
+psutil
+plotly
+tenacity

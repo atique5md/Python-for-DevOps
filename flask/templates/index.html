@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-Time System Monitoring</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .gauge-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Real-Time System Monitoring</h1>
+        <div class="gauge-container">
+            <div id="cpu-gauge" style="width: 400px; height: 300px;"></div>
+            <div id="mem-gauge" style="width: 400px; height: 300px;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Initial setup for CPU Gauge
+        var cpuData = [{
+            type: "indicator",
+            mode: "gauge+number",
+            value: 0,
+            title: { text: "CPU Utilization (%)" },
+            gauge: {
+                axis: { range: [null, 100] },
+                bar: { color: "#1f77b4" },
+                steps: [
+                    { range: [0, 50], color: "#d9f0a3" },
+                    { range: [50, 85], color: "#ffeb84" },
+                    { range: [85, 100], color: "#ff5f5f" }
+                ]
+            }
+        }];
+        var cpuLayout = { width: 400, height: 300, margin: { t: 50, b: 20, l: 30, r: 30 } };
+        Plotly.newPlot('cpu-gauge', cpuData, cpuLayout);
+
+        // Initial setup for Memory Gauge
+        var memData = [{
+            type: "indicator",
+            mode: "gauge+number",
+            value: 0,
+            title: { text: "Memory Utilization (%)" },
+            gauge: {
+                axis: { range: [null, 100] },
+                bar: { color: "#2ca02c" },
+                steps: [
+                    { range: [0, 50], color: "#d9f0a3" },
+                    { range: [50, 85], color: "#ffeb84" },
+                    { range: [85, 100], color: "#ff5f5f" }
+                ]
+            }
+        }];
+        var memLayout = { width: 400, height: 300, margin: { t: 50, b: 20, l: 30, r: 30 } };
+        Plotly.newPlot('mem-gauge', memData, memLayout);
+
+        // Real-time update loop (runs every 1 second)
+        setInterval(function() {
+            fetch('/metrics')
+                .then(response => response.json())
+                .then(data => {
+                    // Smoothly update the Plotly gauges with new values
+                    Plotly.restyle('cpu-gauge', { value: [data.cpu_percent] }, [0]);
+                    Plotly.restyle('mem-gauge', { value: [data.mem_percent] }, [0]);
+                })
+                .catch(error => console.error('Error fetching metrics:', error));
+        }, 1000);
+    </script>
+</body>
+</html>

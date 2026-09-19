@@ -1,0 +1,28 @@
+# --- Python & Flask ---
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+instance/
+.webassets-cache
+
+# --- Terraform ---
+.terraform
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+!terraform.tfvars.example
+.terraform.lock.hcl
+.terraform.tfstate
+.terraform.tfstate.backup
+
+# --- Sensitive Keys & Local Configs ---
+*.pem
+*.pub
+.env
+
+
+.backup_fill.tar.gz
